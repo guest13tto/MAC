@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dx3vyhcpql6wm"]
+[gd_scene load_steps=7 format=3 uid="uid://dx3vyhcpql6wm"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_6wbpp"]
 
@@ -12,6 +12,8 @@ material = SubResource("StandardMaterial3D_r4iwy")
 [sub_resource type="CylinderMesh" id="CylinderMesh_cbrm1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_57pxh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nufa0"]
 
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_6wbpp")
@@ -27,11 +29,16 @@ mesh = SubResource("CylinderMesh_cbrm1")
 shape = SubResource("BoxShape3D_57pxh")
 
 [node name="camera_control" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999948, 0.0102449, 0, -0.0102449, 0.999948, 0, 0, 0)
 top_level = true
 
 [node name="camera_target" type="Node3D" parent="camera_control"]
-transform = Transform3D(1, 0, 0, 0, 0.876953, -0.480576, 0, 0.480576, 0.876953, 0, 3.09503, 7.28986)
+transform = Transform3D(1, 0, 0, 0, 0.876953, -0.480576, 0, 0.480576, 0.876953, 0, 1.29365, 4.86949)
 
 [node name="Camera3D" type="Camera3D" parent="camera_control/camera_target"]
 transform = Transform3D(1, 0, 0, 0, 0.770725, 0.637169, 0, -0.637169, 0.770725, 0, 0, 0)
 current = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="camera_control/camera_target"]
+transform = Transform3D(1, 0, 0, 0, 0.770725, 0.637169, 0, -0.637169, 0.770725, 0, 0, 0)
+shape = SubResource("BoxShape3D_nufa0")

@@ -34,9 +34,10 @@ ambient_light_color = Color(0.732779, 0.306412, 0.835381, 1)
 [node name="game" type="Node3D"]
 
 [node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(25, 0, 0, 0, 1, 0, 0, 0, 25, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0231159, 0, 0.0450714)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.15427, 0.0231159, 0, 0.0450714)
 mesh = SubResource("BoxMesh_5owj2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]

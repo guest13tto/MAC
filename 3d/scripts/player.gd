@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 8
-const SENSITIVITY = 0.005
+const SENSITIVITY = 0.5
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -17,10 +17,18 @@ func _ready():
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		control.rotate_y(-event.relative.x * SENSITIVITY)
-		camera.rotate_x(-event.relative.y * SENSITIVITY)
-		player.rotate_y(-event.relative.x * SENSITIVITY)
 		
+		if -event.relative.y > 0 and control.rotation_degrees.x>-45:
+			control.rotation_degrees.x -= abs(-event.relative.y) * SENSITIVITY
+		if -event.relative.y<0 and control.rotation_degrees.x<45:
+			control.rotation_degrees.x += abs(-event.relative.y) * SENSITIVITY
+		if -event.relative.x>0:
+			control.rotation_degrees.y -= abs(-event.relative.x) * SENSITIVITY
+			player.rotation_degrees.y -= abs(-event.relative.x) * SENSITIVITY
+		if -event.relative.x<0:
+			control.rotation_degrees.y += abs(-event.relative.x) * SENSITIVITY
+			player.rotation_degrees.y +=  abs(-event.relative.x) * SENSITIVITY
+
 func _physics_process(delta: float) -> void:
 
 	# Add the gravity.
