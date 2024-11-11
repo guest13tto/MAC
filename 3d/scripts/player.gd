@@ -15,6 +15,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		
@@ -47,8 +48,7 @@ func _physics_process(delta: float) -> void:
 	var direction = ($camera_control.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	#rotate mesh according to direction of movement
-	
-	
+
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
@@ -57,7 +57,6 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		
 	move_and_slide()
-	
-		
+
 	# Make camera control match player position
 	$camera_control.position = lerp($camera_control.position, position,  0.10)
