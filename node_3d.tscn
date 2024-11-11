@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bqmcbg2mvlh54"]
+[gd_scene load_steps=19 format=3 uid="uid://bqmcbg2mvlh54"]
 
 [ext_resource type="Script" path="res://character_body_3d.gd" id="1_exk31"]
 
@@ -17,6 +17,9 @@ size = Vector3(10, 0.5, 10)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7cwgm"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_sjmcl"]
+radius = 0.635
+
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1mdqc"]
 
 [sub_resource type="Sky" id="Sky_crvpe"]
@@ -30,6 +33,28 @@ ambient_light_color = Color(0.39256, 0.669697, 0.935156, 1)
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_xa4x4"]
 
 [sub_resource type="Compositor" id="Compositor_utle7"]
+
+[sub_resource type="Animation" id="Animation_g4p5v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0.01)]
+}
+tracks/1/type = "scale_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CharacterBody3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 1, 1, 1)
 
 [sub_resource type="Animation" id="Animation_1e7e8"]
 resource_name = "crouch"
@@ -54,39 +79,16 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 1, 1, 1, 0.233333, 1, 1, 0.5, 1)
 
-[sub_resource type="Animation" id="Animation_g4p5v"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterBody3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0.01)]
-}
-tracks/1/type = "scale_3d"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CharacterBody3D")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 1, 1, 1)
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_65v3o"]
 _data = {
 "RESET": SubResource("Animation_g4p5v"),
 "crouch": SubResource("Animation_1e7e8")
 }
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_w0h4m"]
-size = Vector3(10, 0.5, 4)
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_esdmx"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
-[sub_resource type="BoxMesh" id="BoxMesh_xueye"]
-size = Vector3(10, 0.5, 4)
+[sub_resource type="BoxMesh" id="BoxMesh_rri75"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -117,6 +119,13 @@ shape = SubResource("SphereShape3D_7cwgm")
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Ball"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 
+[node name="RigidBody3D" type="RigidBody3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.734265, -0.01)
+
+[node name="Head" type="CollisionShape3D" parent="CharacterBody3D/RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+shape = SubResource("SphereShape3D_sjmcl")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.747253, 0.664539, 0, -0.664539, -0.747253, 0, 4.98449, 0)
 
@@ -130,11 +139,28 @@ libraries = {
 "": SubResource("AnimationLibrary_65v3o")
 }
 
-[node name="StaticBody3D2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -2.67408)
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
-shape = SubResource("BoxShape3D_w0h4m")
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "uncrouch: "
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2/CollisionShape3D"]
-mesh = SubResource("BoxMesh_xueye")
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
+shape = SubResource("ConcavePolygonShape3D_esdmx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
+mesh = SubResource("BoxMesh_rri75")
+skeleton = NodePath("../..")
+
+[connection signal="body_entered" from="CharacterBody3D/RigidBody3D" to="CharacterBody3D" method="_on_rigid_body_3d_body_entered"]
+[connection signal="body_exited" from="CharacterBody3D/RigidBody3D" to="CharacterBody3D" method="_on_rigid_body_3d_body_exited"]

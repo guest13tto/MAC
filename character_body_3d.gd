@@ -2,12 +2,22 @@ extends CharacterBody3D
 @onready var ball := $Ball
 @onready var cam := $Ball/Camera3D
 @onready var animation := $AnimationPlayer
+@onready var label := $"../Control/Label"
 var SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+@export var uncrouch = true
 
+func _on_rigid_body_3d_body_entered(body: Node) -> void:
+	uncrouch = false
+	print ("sus")
+
+func _on_rigid_body_3d_body_exited(body: Node) -> void:
+	uncrouch = true
+	print ("amongus")
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
+	label.text = str(uncrouch)
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -17,7 +27,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("crouch"):
 		SPEED = SPEED - 2
 		$"../AnimationPlayer".play("crouch")
-	elif Input.is_action_just_released("crouch"):
+	elif Input.is_action_just_released("crouch") and uncrouch :
 		SPEED = SPEED + 2
 		$"../AnimationPlayer".play_backwards("crouch")
 	# Get the input direction and handle the movement/deceleration.
