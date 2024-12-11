@@ -106,17 +106,14 @@ func _process(delta: float) -> void:
 	if not slide_check:
 		input.x = Input.get_axis("left", "right")
 		input.z = Input.get_axis("forward", "back")
-		test1 = input.x
-		test2 = input.z
-		test3 = input
+		last_input = input
 		linear_damp = 2
 	if slide_check:
 		linear_damp = 0.1
 		if not lock_direction:
-			last_input = input
 			fixed_direction = head.transform.basis
 			#print((fixed_direction * Vector3(10, 0, 10)).normalized())
-			apply_central_impulse(last_input * Vector3(10, 0, 10))
+			apply_central_impulse(last_input * fixed_direction * -3.5)
 		input = (fixed_direction * input).normalized()
 		lock_direction = true
 	else:
@@ -130,10 +127,10 @@ func _process(delta: float) -> void:
 	elif abs(v) < MAX_WALK_SPEED:
 		if not is_on_floor:
 			if crouch == -1:
-			  linear_damp = 0.5
+				linear_damp = 0.5
 			set_inertia(jump_vector)
 			set_gravity_scale(1.5)
-			apply_central_impulse(input*AIR_SPEED*delta)
+			apply_central_impulse(input * AIR_SPEED * delta)
 		else:
 			linear_damp = 5
 			if crouch:
