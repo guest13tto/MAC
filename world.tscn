@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cbvnws21jha45"]
+[gd_scene load_steps=29 format=3 uid="uid://cbvnws21jha45"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_aoyi2"]
 [ext_resource type="Script" path="res://6.gd" id="2_sa5dh"]
@@ -6,6 +6,8 @@
 [ext_resource type="MeshLibrary" uid="uid://braa8y5xv3ybh" path="res://tiles.tres" id="3_86ybw"]
 [ext_resource type="Script" path="res://Left_score.gd" id="5_18j6y"]
 [ext_resource type="Script" path="res://Right_score.gd" id="6_pmcv1"]
+[ext_resource type="Script" path="res://l_health.gd" id="7_gbsie"]
+[ext_resource type="Script" path="res://r_health.gd" id="8_h53in"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_diidr"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -502,6 +504,28 @@ text = "Score:0
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("6_pmcv1")
+
+[node name="L_health" type="Label" parent="User_interface/Control"]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 590.0
+offset_right = 153.0
+offset_bottom = 639.0
+theme_override_font_sizes/font_size = 35
+text = "health:100
+"
+script = ExtResource("7_gbsie")
+
+[node name="R_health" type="Label" parent="User_interface/Control"]
+layout_mode = 0
+offset_left = 960.0
+offset_top = 595.0
+offset_right = 1098.0
+offset_bottom = 644.0
+theme_override_font_sizes/font_size = 35
+text = "health:100
+"
+script = ExtResource("8_h53in")
 
 [connection signal="area_entered" from="CharacterBody3D/Area3D" to="." method="_on_area_3d_area_entered"]
 [connection signal="body_entered" from="CharacterBody3D/RigidBody3D" to="RigidBody3D" method="_on_rigid_body_3d_body_entered"]
