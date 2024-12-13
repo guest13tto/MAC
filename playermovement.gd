@@ -99,8 +99,6 @@ func _uncrouch_collision() -> bool:
 
 func _process(delta: float) -> void:
 	label2.text = "Total absolute velocity= " + str(abs(linear_velocity.x)+abs(linear_velocity.z))
-	label3.text = "velocity x = " + str(linear_velocity.x)
-	label4.text = "velocity z = " + str(linear_velocity.z)
 	var input:= Vector3.ZERO
 # does not work
 	if not slide_check:
@@ -113,7 +111,11 @@ func _process(delta: float) -> void:
 		if not lock_direction:
 			fixed_direction = head.transform.basis
 			#print((fixed_direction * Vector3(10, 0, 10)).normalized())
-			apply_central_impulse(last_input * fixed_direction * -3.5)
+			if abs(head.transform.basis.x) > abs(head.transform.basis.z):
+				apply_central_impulse(last_input * fixed_direction * 3.5)
+			else:
+				apply_central_impulse(last_input * fixed_direction * -3.5)
+			label3.text = str(fixed_direction)	
 		input = (fixed_direction * input).normalized()
 		lock_direction = true
 	else:
@@ -144,21 +146,21 @@ func _process(delta: float) -> void:
 		crouch = 1
 	elif Input.is_action_just_released("crouch"):
 		crouch = -1
-	elif crouch == 1 and abs(linear_velocity.x)+abs(linear_velocity.z)<10 and not slide_check: 
+	elif crouch == 1 and abs(linear_velocity.x)+abs(linear_velocity.z)<9 and not slide_check: 
 		crouch = 0
 		$"../AnimationPlayer".play("crouch")
 		label.text = "crouch down"
 		linear_damp = 10
 		linear_velocity = Vector3(0,0,0)
 		crouch_check = true
-	if crouch == -1 and not is_roofed and abs(linear_velocity.x)+abs(linear_velocity.z)<10 and not slide_check:
+	if crouch == -1 and not is_roofed and abs(linear_velocity.x)+abs(linear_velocity.z)<9 and not slide_check:
 		crouch = 0
 		$"../AnimationPlayer".play_backwards("crouch")
 		label.text = "crouch up"
 		set_gravity_scale(1)
 		linear_damp = 5
 		crouch_check = false
-	elif crouch == 1 and abs(linear_velocity.x)+abs(linear_velocity.z)>10 and not crouch_check: 
+	elif crouch == 1 and abs(linear_velocity.x)+abs(linear_velocity.z)>9 and not crouch_check: 
 		crouch = 0
 		slide_check = true
 		$"../AnimationPlayer".play("crouch")
