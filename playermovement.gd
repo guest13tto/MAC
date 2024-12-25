@@ -33,6 +33,7 @@ var lock_direction = false
 var test3 = Vector3.ZERO
 var last_input = Vector3.ZERO
 var headmovement = Vector3()
+var applied = false
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var coyote = $CoyoteTimer
@@ -48,6 +49,8 @@ var headmovement = Vector3()
 @onready var label2 = $"../GUI/total_linear_velocity"
 @onready var label3 = $"../GUI/Linear_x"
 @onready var label4 = $"../GUI/Linear_v"
+@onready var label5 = $"../central_force_z"
+@onready var label6 = $"../central_force_x"
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	self.set_contact_monitor(true)
@@ -101,6 +104,7 @@ func _process(delta: float) -> void:
 	label2.text = "Total absolute velocity= " + str(abs(linear_velocity.x)+abs(linear_velocity.z))
 	var input:= Vector3.ZERO
 # does not work
+	label4.text = str(head.transform.basis*input)
 	if not slide_check:
 		input.x = Input.get_axis("left", "right")
 		input.z = Input.get_axis("forward", "back")
@@ -108,16 +112,14 @@ func _process(delta: float) -> void:
 		linear_damp = 2
 	if slide_check:
 		linear_damp = 0.1
-		if not lock_direction:
-			fixed_direction = head.transform.basis
-			#print((fixed_direction * Vector3(10, 0, 10)).normalized())
-			if abs(head.transform.basis.x) > abs(head.transform.basis.z):
-				apply_central_impulse(last_input * fixed_direction * 3.5)
-			else:
-				apply_central_impulse(last_input * fixed_direction * -3.5)
-			label3.text = str(fixed_direction)	
-		input = (fixed_direction * input).normalized()
-		lock_direction = true
+		if not lock_direction:   
+			var forward_direction = head.transform.basis.z.normalized()
+			var side_direction = head.transform.basis.x.normalized()       
+			var slide_input = Vector3(last_input.x, 0, last_input.z).normalized()        
+			var slide_impulse = (forward_direction * slide_input.z + side_direction * slide_input.x) * 3.5        
+			apply_central_impulse(slide_impulse)           
+			label3.text = str(slide_impulse)
+			lock_direction = true
 	else:
 		lock_direction = false
 		input = (head.transform.basis * input).normalized()
