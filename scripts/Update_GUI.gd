@@ -1,9 +1,9 @@
 extends Control
 
-@onready var L_score = $L_score
-@onready var R_score = $R_score
+@onready var L_score = $VBoxContainer/score_bar/L_score
+@onready var R_score = $VBoxContainer/score_bar/R_score
 @onready var R_stamina = $rightside/right_stamina/TextureProgressBar
-@onready var L_stamina = $leftside/Left_stamina/TextureProgressBar
+@onready var L_stamina = $leftside/left_stamina/TextureProgressBar
 @onready var R_health = $rightside/right_health/TextureProgressBar
 @onready var L_health = $leftside/left_health/TextureProgressBar
 

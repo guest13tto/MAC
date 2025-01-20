@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://s7ngl4cx618c"]
+
+[ext_resource type="PackedScene" uid="uid://3hbdqpmuxpbx" path="res://assets/builds/bench.blend" id="1_g031v"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_l5fp2"]
+points = PackedVector3Array(-1.1644, -1.3624, -1.20093, 29.2544, 3.51389, -0.969088, 27.8958, 3.2961, -1.54125, -1.1644, 3.51389, -0.969088, 27.9362, -1.15108, 1, -0.932152, 1.19126, 1.12075, 29.2544, -1.3624, -1.20093, 28.7899, 1.19126, 1.12075, 0.153819, -1.15108, 1, -1.1644, 2.58503, -1.6657, 29.2544, 2.58503, -1.6657, 0.194214, 3.2961, -1.54125, 29.2544, 0.959757, 1.12075, -1.1644, 0.959757, 1.12075, -0.467651, 3.28144, -0.736702, 28.3254, 3.28144, -0.736702)
+
+[node name="bench" instance=ExtResource("1_g031v")]
+transform = Transform3D(0.655375, 0, 0, 0, 0.655375, 0, 0, 0, 0.655375, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="bench_001" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="bench_001/StaticBody3D" index="0"]
+shape = SubResource("ConvexPolygonShape3D_l5fp2")

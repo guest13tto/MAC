@@ -9,7 +9,6 @@ extends Node
 @onready var L_stamina = 100
 @onready var R_stamina = 100
 @onready var time = 0.0
-@onready var volume = 0.0
 @onready var CONTROLLER_SENSITIVITY = 0.03 
 @onready var BASE_FOV = 55.0
 

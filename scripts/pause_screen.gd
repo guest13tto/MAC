@@ -1,5 +1,7 @@
 extends Control
 
+@export var stream: AudioStream
+
 func _ready() -> void:
 	$AnimationPlayer.play("RESET")
 
@@ -21,10 +23,12 @@ func Esc():
 		resume()
 
 func _on_resume_pressed() -> void:
+	AudioManager.play_sound(stream)
 	resume()
 
 
 func _on_exit_pressed() -> void:
+	AudioManager.play_sound(stream)
 	resume()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
@@ -38,3 +42,7 @@ func _process(_delta):
 
 
 	
+
+
+func _on_slide_timer_timeout() -> void:
+	pass # Replace with function body.

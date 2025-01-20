@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://ba1wtu47ipvgu"]
+[gd_scene load_steps=9 format=3 uid="uid://ba1wtu47ipvgu"]
 
 [ext_resource type="Script" path="res://scripts/pause_screen.gd" id="1_6mg3o"]
+[ext_resource type="AudioStream" uid="uid://nysc5i7xxhxj" path="res://assets/audio/button click.mp3" id="2_rn14v"]
 [ext_resource type="Shader" path="res://Shaders/pause_screen.gdshader" id="2_yjsy8"]
 
 [sub_resource type="Animation" id="Animation_a4dpb"]
@@ -109,6 +110,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_6mg3o")
+stream = ExtResource("2_rn14v")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

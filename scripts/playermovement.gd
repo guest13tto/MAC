@@ -53,6 +53,15 @@ var dead = false
 @onready var liquid_shooting = $Head/Camera3D/Gun/gun/WaterMesh/MeshInstance3D/LiquidShooting
 @onready var liquid_finish = $Head/Camera3D/Gun/gun/WaterMesh/MeshInstance3D/LiquidFinish
 @onready var slide_timer = $"SlideTimer"
+
+@onready var jump_sound = $"sound effects/Jumping"
+@onready var walk_sound = $"sound effects/Walking"
+@onready var sprint_sound = $"sound effects/Sprinting" 
+@onready var gunshot_sound = $"sound effects/Gunshot"
+@onready var slide_sound = $"sound effects/slide"
+#sound effects
+
+
 var is_shooting = false
 #Bullets
 var bullet = load("res://scenes/bullet.tscn")
@@ -119,6 +128,8 @@ func _uncrouch_collision() -> bool: # same but for roof
 		return true
 	return false
 
+
+
 func _process(delta: float) -> void:
 	# setup
 	linear_damp = 5 if not slide_check else Global.SLIDE_FRICTION # set friction here for some reason
@@ -129,6 +140,7 @@ func _process(delta: float) -> void:
 	var target_fov = Global.BASE_FOV + Global.FOV_CHANGE*multiplier
 	# input
 	if Input.is_action_pressed("shoot"):
+		gunshot_sound.play()
 		shoot_particles.emitting = true
 		if not is_shooting:
 			liquid.play("LiquidShoot")
@@ -157,6 +169,7 @@ func _process(delta: float) -> void:
 			crouch_check = true
 			max_speed = Global.MAX_CROUCH_SPEED # change max speed
 		elif not crouch_check: # same but if speed is high and not crouching
+			slide_sound.play()
 			slide_check = true
 			label.text = "slide down"
 			
@@ -184,6 +197,7 @@ func _process(delta: float) -> void:
 	
 			
 	if Input.is_action_just_pressed("jump") and is_on_floor:
+		jump_sound.play()
 		if slide_check:
 			slide_check = false
 			label.text = "slide up"
@@ -238,6 +252,8 @@ func _process(delta: float) -> void:
 	if Global.L_stamina <= 0:
 		sprint_toggle = 0
 		paused = true
+	
+	
 	
 	#fov code
 	camera.fov = lerp(camera.fov, target_fov, delta*4)
