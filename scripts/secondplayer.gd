@@ -81,6 +81,7 @@ func _uncrouch_collision() -> bool:
 
 func hit(damage):
 	if not dead:
+		print(Global.R_health)
 		if Global.R_health <= 0:
 			dead = true
 			Global.R_health = 0.0
@@ -89,3 +90,6 @@ func hit(damage):
 		
 func _process(delta: float) -> void:
 	pass
+
+func _on_static_body_3d_apply_damage() -> void:
+	hit(10)

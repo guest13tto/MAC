@@ -24,6 +24,11 @@ var multiplier = 1
 var slide_cooldown = false
 var paused = true
 var dead = false
+var scope = false
+var tempscope = 0
+var weapon = 1
+var hitcooldown = false
+var fov = 1
 
 # object variables
 #head and pivot are important but its kinda hard to explain, its pretty much another node inside the rigidbody that can act as the head, pivot adds another axis
@@ -39,11 +44,13 @@ var dead = false
 # 2d debugging labels
 @onready var label = $"../GUI/crouch_status"
 @onready var label2 = $"../GUI/total_linear_velocity"
+@onready var label3 = $"../hitbox_monitor"
 # animation player
 @onready var animationPlayer = $"../AnimationPlayer"
 # Called when the node enters the scene tree for the first time.
 
-
+@onready var sword = $Head/Camera3D/Sword
+@onready var gun = $Head/Camera3D/Gun
 @onready var shoot_particles = $Head/Camera3D/Gun/GPUParticles3D
 @onready var gun_barrel = $Head/Camera3D/Gun/RayCast3D
 @onready var shoot = $Head/Camera3D/Gun/Shoot
@@ -53,6 +60,9 @@ var dead = false
 @onready var liquid_shooting = $Head/Camera3D/Gun/gun/WaterMesh/MeshInstance3D/LiquidShooting
 @onready var liquid_finish = $Head/Camera3D/Gun/gun/WaterMesh/MeshInstance3D/LiquidFinish
 @onready var slide_timer = $"SlideTimer"
+@onready var sword_hitbox = $Head/Camera3D/Sword/StaticBody3D/Hitbox
+@onready var hit_timer = $Head/Camera3D/Sword/HitTimer
+
 var is_shooting = false
 #Bullets
 var bullet = load("res://scenes/bullet.tscn")
@@ -60,6 +70,7 @@ var instance
 
 func _ready() -> void:
 	# so theres coollision logic
+	sword.position = Vector3(1,-0.376,-0.998)
 	self.set_contact_monitor(true)
 	self.set_max_contacts_reported(999)
 	# idk just do it
@@ -121,14 +132,24 @@ func _uncrouch_collision() -> bool: # same but for roof
 
 func _process(delta: float) -> void:
 	# setup
+	if sword_hitbox.monitoring == true:
+		label3.text = "True"
+	else:
+		label3.text = "False"
 	linear_damp = 5 if not slide_check else Global.SLIDE_FRICTION # set friction here for some reason
 	label2.text = "Total absolute velocity= " + str(sqrt(pow(linear_velocity.x,2)+pow(linear_velocity.z,2))) # set 2d label
 	var v = sqrt(pow(linear_velocity.x,2)+pow(linear_velocity.y,2)+pow(linear_velocity.z,2)) # maths
 	is_on_floor = _touching_floor()
 	is_roofed = _uncrouch_collision()
 	var target_fov = Global.BASE_FOV + Global.FOV_CHANGE*multiplier
+	
+	if animationPlayer.current_animation == "hit":
+		sword_hitbox.monitoring = true
+	else:
+		sword_hitbox.monitoring = false
+	
 	# input
-	if Input.is_action_pressed("shoot"):
+	if Input.is_action_pressed("shoot") and weapon == 1:
 		shoot_particles.emitting = true
 		if not is_shooting:
 			liquid.play("LiquidShoot")
@@ -148,6 +169,11 @@ func _process(delta: float) -> void:
 		liquid_finish.play("LiquidFinish")
 		idle.play("Idle")
 		is_shooting = false
+		
+	if Input.is_action_pressed("shoot") and weapon == 2 and hitcooldown == false:
+		animationPlayer.play("hit")
+		hitcooldown = true
+		hit_timer.start(1)
 		
 	if Input.is_action_just_pressed("crouch"):
 		animationPlayer.play("crouch")
@@ -239,5 +265,41 @@ func _process(delta: float) -> void:
 		sprint_toggle = 0
 		paused = true
 	
+	fov = lerp(camera.fov, target_fov, delta*4)
 	#fov code
-	camera.fov = lerp(camera.fov, target_fov, delta*4)
+	if not scope:
+		camera.fov = lerp(camera.fov, target_fov, delta*4)
+	
+	if Input.is_action_just_pressed("rightclick") and weapon == 1:
+		scope = true
+		tempscope = camera.fov
+		Global.CONTROLLER_SENSITIVITY -= (0.03/2)
+		Global.MOUSE_SENSITIVITY -= (0.004/2)
+	if Input.is_action_just_released("rightclick") and scope == true:
+		Global.CONTROLLER_SENSITIVITY += (0.03/2)
+		Global.MOUSE_SENSITIVITY +=  (0.004/2)
+		scope = false
+	if scope and camera.fov >= fov -2	:
+		camera.fov -= 2
+		
+	if Input.is_action_just_pressed("scrolldown") and weapon < 2:
+		weapon += 1
+		if weapon == 1:
+			gun.visible = true
+			sword.visible = false
+		if weapon == 2:
+			sword.visible = true
+			gun.visible = false
+	if Input.is_action_just_pressed("scrollup") and weapon > 1:
+		weapon -= 1
+		if weapon == 1:
+			gun.visible = true
+			sword.visible = false
+		if weapon == 2:
+			sword.visible = true
+			gun.visible = false
+		
+
+
+func _on_hit_timer_timeout() -> void:
+	hitcooldown = false
